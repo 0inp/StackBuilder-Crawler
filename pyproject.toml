@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "sb-crawler"
+version = "0.1.0"
+description = ""
+authors = ["Stephane Point <point.steph@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+beautifulsoup4 = "^4.12.3"
+requests = "^2.32.3"
+fastapi = "^0.111.0"
+uvicorn = "^0.30.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
