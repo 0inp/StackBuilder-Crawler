@@ -1,4 +1,4 @@
-from .crawler import CrawlerEntryAdapter
+from .crawler import HackerNewsCrawlerEntryAdapter
 from .logger import LoggerAdapter
 
-__all__ = [CrawlerEntryAdapter, LoggerAdapter]
+__all__ = [HackerNewsCrawlerEntryAdapter, LoggerAdapter]

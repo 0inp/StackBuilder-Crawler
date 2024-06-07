@@ -5,8 +5,8 @@ from src.domain.entities import EntryEntity
 from src.domain.repositories.entry_repository import EntryRepositoryInterface
 
 
-class CrawlerEntryAdapter(EntryRepositoryInterface):
-    """Crawler Repository for Entries"""
+class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
+    """Crawler implemention for the HackerNews source."""
 
     @staticmethod
     def get_entry_number_from_html(html) -> int:

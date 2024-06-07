@@ -5,7 +5,7 @@ from typing import Optional
 import typer
 from typing_extensions import Annotated
 
-from src.adapters import CrawlerEntryAdapter, LoggerAdapter
+from src.adapters import HackerNewsCrawlerEntryAdapter, LoggerAdapter
 from src.domain.dtos.get_entries import (
     Filter,
     FilterFieldEnum,
@@ -26,7 +26,7 @@ class CliController:
     verbose: bool
 
     def run(self):
-        crawler_repo = CrawlerEntryAdapter()
+        crawler_repo = HackerNewsCrawlerEntryAdapter()
 
         log_level = logging.INFO
         if self.verbose:
