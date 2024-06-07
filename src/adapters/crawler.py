@@ -15,8 +15,12 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
         :param html: str
         :return: int
         """
-        number = int(html.find("span", class_="rank").get_text().strip("."))
-        return number
+        html_rank = html.find("span", class_="rank")
+        try:
+            index = int(html_rank.get_text().strip("."))
+        except AttributeError:
+            return None
+        return index
 
     @staticmethod
     def get_entry_title_from_html(html: Tag) -> str | None:
@@ -25,7 +29,11 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
         :param html: str
         :return: str
         """
-        title = html.find("span", class_="titleline").a.get_text()
+        html_titleline = html.find("span", class_="titleline")
+        try:
+            title = html_titleline.a.get_text()
+        except AttributeError:
+            return None
         return title
 
     @staticmethod
@@ -36,10 +44,11 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
         :param html: str
         :return: int | None
         """
-        total_points_node = html.next_sibling.find("span", class_="score")
-        if total_points_node is None:
+        try:
+            total_points_node = html.next_sibling.find("span", class_="score")
+            total_points = int(total_points_node.get_text().strip(" points"))
+        except AttributeError:
             return None
-        total_points = int(total_points_node.get_text().strip(" points"))
         return total_points
 
     @staticmethod
