@@ -2,11 +2,12 @@ from dataclasses import dataclass
 
 from datetime import datetime
 
-from src.domain.dtos.get_entries import Filter, Order
+from src.domain.entities.filter import FilterEntity
+from src.domain.entities.order import OrderEntity
 
 
 @dataclass
 class LogEntity:
     request_time: datetime
-    filter: Filter
-    order: Order
+    filter: FilterEntity
+    order: OrderEntity

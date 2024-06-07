@@ -1,14 +1,17 @@
 from datetime import datetime
 
 from src.domain.dtos.get_entries import (
-    Filter,
-    FilterFieldEnum,
     GetEntriesDto,
-    Order,
+)
+from src.domain.entities import (
+    EntryEntity,
+    FilterEntity,
+    FilterFieldEnum,
+    LogEntity,
     OrderDirectionEnum,
+    OrderEntity,
     OrderFieldEnum,
 )
-from src.domain.entities import EntryEntity, LogEntity
 from src.domain.repositories import EntryRepositoryInterface, LogRepositoryInterface
 
 
@@ -24,10 +27,10 @@ class GetEntries:
     @staticmethod
     def filter_entries(
         entries: list[EntryEntity],
-        filter: Filter,
+        filter: FilterEntity,
     ) -> list[EntryEntity]:
         match filter.field:
-            case FilterFieldEnum.number:
+            case FilterFieldEnum.index:
                 operator_func = filter.operator.convert_str_to_operator()
                 filtered_entries = [
                     entry
@@ -58,7 +61,9 @@ class GetEntries:
         return filtered_entries
 
     @staticmethod
-    def order_entries(entries: list[EntryEntity], order: Order) -> list[EntryEntity]:
+    def order_entries(
+        entries: list[EntryEntity], order: OrderEntity
+    ) -> list[EntryEntity]:
         reverse = True if order.direction == OrderDirectionEnum.desc else False
         match order.field:
             case OrderFieldEnum.points:
@@ -71,7 +76,7 @@ class GetEntries:
                 )
         return ordered_entries
 
-    def log_request(self, filter: Filter, order: Order):
+    def log_request(self, filter: FilterEntity, order: OrderEntity):
         log = LogEntity(request_time=datetime.now(), filter=filter, order=order)
         try:
             self.logger_repository.log_request(log)

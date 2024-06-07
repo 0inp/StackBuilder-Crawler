@@ -7,12 +7,14 @@ from typing_extensions import Annotated
 
 from src.adapters import HackerNewsCrawlerEntryAdapter, LoggerAdapter
 from src.domain.dtos.get_entries import (
-    Filter,
+    GetEntriesDto,
+)
+from src.domain.entities import (
+    FilterEntity,
     FilterFieldEnum,
     FilterOperatorEnum,
-    GetEntriesDto,
-    Order,
     OrderDirectionEnum,
+    OrderEntity,
     OrderFieldEnum,
 )
 from src.usecases import GetEntries
@@ -21,8 +23,8 @@ from src.usecases import GetEntries
 @dataclass
 class CliController:
     source: str
-    filter: Filter | None
-    order: Order | None
+    filter: FilterEntity | None
+    order: OrderEntity | None
     verbose: bool
 
     def run(self):
@@ -67,11 +69,11 @@ def main(
     filter_cls = None
     if filter is not None:
         filter_field, operator, value = filter
-        filter_cls = Filter(field=filter_field, operator=operator, value=value)
+        filter_cls = FilterEntity(field=filter_field, operator=operator, value=value)
     order_cls = None
     if order is not None:
         order_field, direction = order
-        order_cls = Order(field=order_field, direction=direction)
+        order_cls = OrderEntity(field=order_field, direction=direction)
     CliController(
         source=source, filter=filter_cls, order=order_cls, verbose=verbose
     ).run()
