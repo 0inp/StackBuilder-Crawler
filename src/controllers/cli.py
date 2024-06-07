@@ -1,9 +1,11 @@
+import logging
 from dataclasses import dataclass
 from typing import Optional
 
 import typer
 from typing_extensions import Annotated
 
+from src.adapters import CrawlerEntryAdapter, LoggerAdapter
 from src.domain.dtos.get_entries import (
     Filter,
     Order,
@@ -14,7 +16,6 @@ from src.domain.dtos.get_entries import (
     GetEntriesDto,
 )
 from src.usecases import GetEntries
-from src.adapters import CrawlerEntryAdapter
 
 
 @dataclass
@@ -22,11 +23,19 @@ class CliController:
     source: str
     filter: Filter | None
     order: Order | None
+    verbose: bool
 
     def run(self):
-        repo = CrawlerEntryAdapter()
+        crawler_repo = CrawlerEntryAdapter()
+
+        log_level = logging.INFO
+        if self.verbose:
+            log_level = logging.DEBUG
+        logger_repo = LoggerAdapter(log_level=log_level)
+
         dto = GetEntriesDto(source=self.source, filter=self.filter, order=self.order)
-        result_entries = GetEntries(repo).execute(dto=dto)
+        result_entries = GetEntries(crawler_repo, logger_repo).execute(dto=dto)
+
         typer.echo("---RESULT---")
         for entry in result_entries:
             typer.echo(entry)
@@ -50,6 +59,9 @@ def main(
             show_default=False,
         ),
     ] = None,
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="If True, set Log Level to DEBUG"
+    ),
 ):
 
     filter_cls = None
@@ -60,4 +72,6 @@ def main(
     if order is not None:
         order_field, direction = order
         order_cls = Order(field=order_field, direction=direction)
-    CliController(source=source, filter=filter_cls, order=order_cls).run()
+    CliController(
+        source=source, filter=filter_cls, order=order_cls, verbose=verbose
+    ).run()

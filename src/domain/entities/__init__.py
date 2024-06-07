@@ -1,5 +1,4 @@
 from .entry import EntryEntity
+from .log import LogEntity
 
-# from .log import LogEntity
-
-__all__ = [EntryEntity]
+__all__ = [EntryEntity, LogEntity]

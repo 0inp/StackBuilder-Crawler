@@ -1,3 +1,3 @@
-from .get_entry_usecase import GetEntries
+from .get_entries_usecase import GetEntries
 
 __all__ = [GetEntries]

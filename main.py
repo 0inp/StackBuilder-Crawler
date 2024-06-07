@@ -1,5 +1,5 @@
 import typer
-from src.controllers import main
+from src.controllers.cli import main
 
 
 if __name__ == "__main__":
