@@ -12,8 +12,11 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
     def get_entry_index_from_html(html: Tag) -> int | None:
         """Get the index of the entry from the html code.
 
-        :param html: str
-        :return: int
+        Args
+            html (Tag): represent an entry node in the html.
+
+        Returns:
+            index (Optional(int)): the index of the entry.
         """
         html_rank = html.find("span", class_="rank")
         try:
@@ -26,8 +29,12 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
     def get_entry_title_from_html(html: Tag) -> str | None:
         """Get the title of the entry from the html code.
 
-        :param html: str
-        :return: str
+        Args
+            html (Tag): represent an entry node in the html.
+
+        Returns:
+            title (Optional(str)): the title of the entry.
+
         """
         html_titleline = html.find("span", class_="titleline")
         try:
@@ -39,10 +46,13 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
     @staticmethod
     def get_entry_points_from_html(html: Tag) -> int | None:
         """Get the number of points of the entry from the html code.
-        Might be absent.
 
-        :param html: str
-        :return: int | None
+        Args
+            html (Tag): represent an entry node in the html.
+
+        Returns:
+            total_points (Optional(int)): number of points of an entry if found.
+
         """
         try:
             total_points_node = html.next_sibling.find("span", class_="score")
@@ -52,12 +62,17 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
         return total_points
 
     @staticmethod
-        Might be absent
     def get_entry_comments_from_html(html: Tag) -> int | None:
         """Get the number of comments of the entry from the html code.
 
-        :param html: str
-        :return: int | None
+        Manage the case with 0 comments.
+
+        Args
+            html (Tag): represent an entry node in the html.
+
+        Returns:
+            total_comments (Optional(int)): number of comments of an entry if found.
+
         """
         subline_nodes = html.next_sibling.find_all("a")
 
@@ -72,12 +87,6 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
         return None
 
     def get_entries(self, source: str) -> list[EntryEntity]:
-        """Get entries from crawling source
-
-        :param source: str
-        :param filters: list[str] | None
-        :return: list[EntryEntity]
-        """
         # TODO: get to page 2 until i get 30 entries
         page = requests.get(source)
         if not page.status_code == 200:

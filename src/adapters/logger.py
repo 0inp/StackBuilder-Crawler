@@ -5,7 +5,12 @@ from src.domain.repositories import LogRepositoryInterface
 
 
 class LoggerAdapter(LogRepositoryInterface):
-    """Crawler Repository for Entries"""
+    """File Logger implementation.
+
+    This logger will log everything according to the log level passed
+    in a file called app.log.
+
+    """
 
     def __init__(self, log_level: int):
         logging.basicConfig(
@@ -16,7 +21,6 @@ class LoggerAdapter(LogRepositoryInterface):
             level=log_level,
         )
         self.logger = logging.getLogger(__name__)
-
 
     def log_request(self, log_entity: LogEntity):
         if log_entity.filter is None:
@@ -34,6 +38,8 @@ class LoggerAdapter(LogRepositoryInterface):
 
     def log_debug(self, message: str) -> None:
         """Log debug message.
-        :param message: Message to log.
+
+        Args:
+            message (str): Message to log.
         """
         logging.debug(message)

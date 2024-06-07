@@ -22,6 +22,7 @@ from src.usecases import GetEntries
 
 @dataclass
 class CliController:
+    """CLI controller of the application."""
 
     def run(
         self,
@@ -30,6 +31,16 @@ class CliController:
         order: OrderEntity | None,
         verbose: bool,
     ):
+        """Call the GetEntries usecase.
+
+        Print in the console the output
+        Args
+            source (str): url of the source to use.
+            filter (Optional(FilterEntity)): Representation of a filter to use if there is one.
+            order (Optional(OrderEntity)): Representation of an order query to use if there is one.
+            verbose (bool): LogLevel.DEBUG if verbose is True, else LogLevel.INFO
+
+        """
         crawler_repo = HackerNewsCrawlerEntryAdapter()
 
         log_level = logging.INFO
@@ -67,6 +78,16 @@ def main(
         False, "--verbose", "-v", help="If True, set Log Level to DEBUG"
     ),
 ):
+    """CLI entrypoint.
+
+    Print in the console the output
+    Args
+        source (str): url of the source to use.
+        filter (Optional(FilterEntity)): Representation of a filter to use if there is one.
+        order (Optional(OrderEntity)): Representation of an order query to use if there is one.
+        verbose (bool): LogLevel.DEBUG if verbose is True, else LogLevel.INFO
+
+    """
 
     filter_cls = None
     if filter is not None:
