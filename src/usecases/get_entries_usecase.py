@@ -2,15 +2,14 @@ from datetime import datetime
 
 from src.domain.dtos.get_entries import (
     Filter,
-    Order,
     FilterFieldEnum,
-    OrderFieldEnum,
-    OrderDirectionEnum,
     GetEntriesDto,
+    Order,
+    OrderDirectionEnum,
+    OrderFieldEnum,
 )
-from src.domain.repositories import EntryRepositoryInterface, LogRepositoryInterface
-
 from src.domain.entities import EntryEntity, LogEntity
+from src.domain.repositories import EntryRepositoryInterface, LogRepositoryInterface
 
 
 class GetEntries:

@@ -1,6 +1,6 @@
 import operator
 from dataclasses import dataclass
-from enum import Enum, auto
+from enum import Enum
 
 
 class FilterFieldEnum(Enum):

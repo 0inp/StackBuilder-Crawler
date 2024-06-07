@@ -8,12 +8,12 @@ from typing_extensions import Annotated
 from src.adapters import CrawlerEntryAdapter, LoggerAdapter
 from src.domain.dtos.get_entries import (
     Filter,
-    Order,
     FilterFieldEnum,
     FilterOperatorEnum,
-    OrderFieldEnum,
-    OrderDirectionEnum,
     GetEntriesDto,
+    Order,
+    OrderDirectionEnum,
+    OrderFieldEnum,
 )
 from src.usecases import GetEntries
 

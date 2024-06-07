@@ -1,7 +1,7 @@
 import logging
 
-from src.domain.repositories import LogRepositoryInterface
 from src.domain.entities import LogEntity
+from src.domain.repositories import LogRepositoryInterface
 
 
 class LoggerAdapter(LogRepositoryInterface):
