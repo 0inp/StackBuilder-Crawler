@@ -88,7 +88,7 @@ class CrawlerEntryAdapter(EntryRepositoryInterface):
             if total_comments is None:
                 continue
             entry = EntryEntity(
-                number=number,
+                index=number,
                 title=title,
                 total_points=total_points,
                 total_comments=total_comments,

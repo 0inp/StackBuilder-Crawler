@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class EntryEntity:
-    number: int
+    index: int
     title: str
     total_points: int
     total_comments: int

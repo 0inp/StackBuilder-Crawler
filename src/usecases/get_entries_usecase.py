@@ -33,7 +33,7 @@ class GetEntries:
                 filtered_entries = [
                     entry
                     for entry in entries
-                    if operator_func(entry.number, filter.value)
+                    if operator_func(entry.index, filter.value)
                 ]
             case FilterFieldEnum.number_of_words:
                 operator_func = filter.operator.convert_str_to_operator()
