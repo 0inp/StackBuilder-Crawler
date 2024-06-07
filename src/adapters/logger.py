@@ -7,7 +7,7 @@ from src.domain.repositories import LogRepositoryInterface
 class LoggerAdapter(LogRepositoryInterface):
     """Crawler Repository for Entries"""
 
-    def __init__(self, log_level: bool):
+    def __init__(self, log_level: int):
         logging.basicConfig(
             filename="app.log",
             filemode="a",
@@ -17,12 +17,18 @@ class LoggerAdapter(LogRepositoryInterface):
         )
         self.logger = logging.getLogger(__name__)
 
-    def log_request(self, log: LogEntity):
 
-        filter_log = (
-            f"{log.filter.field.value} {log.filter.operator.value} {log.filter.value}"
-        )
-        order_log = f"{log.order.field.value} {log.order.direction.value}"
+    def log_request(self, log_entity: LogEntity):
+        if log_entity.filter is None:
+            filter_log = "Nothing"
+        else:
+            filter_log = f"{log_entity.filter.field.value} {log_entity.filter.operator.value} {log_entity.filter.value}"
+        if log_entity.order is None:
+            order_log = "Nothing"
+        else:
+            order_log = (
+                f"{log_entity.order.field.value} {log_entity.order.direction.value}"
+            )
         log_message = f"Filter by: {filter_log} - Order by: {order_log}"
         self.logger.info(log_message)
 
