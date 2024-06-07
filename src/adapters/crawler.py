@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 from src.domain.entities import EntryEntity
 from src.domain.repositories.entry_repository import EntryRepositoryInterface
@@ -9,8 +9,8 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
     """Crawler implemention for the HackerNews source."""
 
     @staticmethod
-    def get_entry_number_from_html(html) -> int:
-        """Get the number of the entry from the html code
+    def get_entry_index_from_html(html: Tag) -> int | None:
+        """Get the index of the entry from the html code.
 
         :param html: str
         :return: int
@@ -19,8 +19,8 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
         return number
 
     @staticmethod
-    def get_entry_title_from_html(html) -> str:
-        """Get the title of the entry from the html code
+    def get_entry_title_from_html(html: Tag) -> str | None:
+        """Get the title of the entry from the html code.
 
         :param html: str
         :return: str
@@ -29,7 +29,7 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
         return title
 
     @staticmethod
-    def get_entry_points_from_html(html) -> int | None:
+    def get_entry_points_from_html(html: Tag) -> int | None:
         """Get the number of points of the entry from the html code.
         Might be absent.
 
@@ -43,9 +43,9 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
         return total_points
 
     @staticmethod
-    def get_entry_comments_from_html(html) -> int | None:
-        """Get the number of comments of the entry from the html code
         Might be absent
+    def get_entry_comments_from_html(html: Tag) -> int | None:
+        """Get the number of comments of the entry from the html code.
 
         :param html: str
         :return: int | None
