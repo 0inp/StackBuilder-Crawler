@@ -79,8 +79,12 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
 
         entries = []
         for html_entry in html_entries:
-            number = self.get_entry_number_from_html(html_entry)
+            index = self.get_entry_index_from_html(html_entry)
+            if index is None:
+                continue
             title = self.get_entry_title_from_html(html_entry)
+            if title is None:
+                continue
             total_points = self.get_entry_points_from_html(html_entry)
             if total_points is None:
                 continue
