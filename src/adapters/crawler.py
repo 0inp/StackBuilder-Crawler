@@ -1,12 +1,20 @@
+from dataclasses import dataclass
 import requests
 from bs4 import BeautifulSoup, Tag
 
 from src.domain.entities import EntryEntity
-from src.domain.repositories.entry_repository import EntryRepositoryInterface
+from src.domain.repositories import EntryRepositoryInterface, LogRepositoryInterface
 
 
+@dataclass
 class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
-    """Crawler implemention for the HackerNews source."""
+    """Crawler implemention for the HackerNews source.
+
+    Attributes:
+        logger (Logger): logger.
+    """
+
+    logger: LogRepositoryInterface
 
     @staticmethod
     def get_entry_index_from_html(html: Tag) -> int | None:
@@ -88,14 +96,14 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
 
     def get_entries(self, source: str) -> list[EntryEntity]:
         # TODO: get to page 2 until i get 30 entries
+        entries = []
         page = requests.get(source)
         if not page.status_code == 200:
-            # TODO: raise exception
-            raise
+            self.logger.log_debug(f"can't access source {source}")
+            return entries
         soup = BeautifulSoup(page.text, "html.parser")
         html_entries = soup.find_all("tr", class_="athing")
 
-        entries = []
         for html_entry in html_entries:
             index = self.get_entry_index_from_html(html_entry)
             if index is None:
@@ -110,7 +118,7 @@ class HackerNewsCrawlerEntryAdapter(EntryRepositoryInterface):
             if total_comments is None:
                 continue
             entry = EntryEntity(
-                index=number,
+                index=index,
                 title=title,
                 total_points=total_points,
                 total_comments=total_comments,

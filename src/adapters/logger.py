@@ -13,14 +13,15 @@ class LoggerAdapter(LogRepositoryInterface):
     """
 
     def __init__(self, log_level: int):
+        self.log_level = log_level
+        self.logger = logging.getLogger("adapter_logger")
         logging.basicConfig(
             filename="app.log",
             filemode="a",
             datefmt="%Y-%m-%d %H:%M:%S",
             format="%(levelname)s - %(asctime)-s - %(message)s",
-            level=log_level,
         )
-        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(self.log_level)
 
     def log_request(self, log_entity: LogEntity):
         if log_entity.filter is None:
@@ -33,6 +34,7 @@ class LoggerAdapter(LogRepositoryInterface):
             order_log = (
                 f"{log_entity.order.field.value} {log_entity.order.direction.value}"
             )
+        print("toto")
         log_message = f"Filter by: {filter_log} - Order by: {order_log}"
         self.logger.info(log_message)
 
