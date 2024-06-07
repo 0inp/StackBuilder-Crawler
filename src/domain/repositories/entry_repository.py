@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.domain.entities.entry import EntryEntity
+from src.domain.entities import EntryEntity
 
 
 class EntryRepositoryInterface(ABC):

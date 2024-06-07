@@ -1,5 +1,3 @@
-from typing import Tuple, Union
-
 import requests
 from bs4 import BeautifulSoup
 
