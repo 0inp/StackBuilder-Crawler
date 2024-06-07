@@ -22,20 +22,22 @@ from src.usecases import GetEntries
 
 @dataclass
 class CliController:
-    source: str
-    filter: FilterEntity | None
-    order: OrderEntity | None
-    verbose: bool
 
-    def run(self):
+    def run(
+        self,
+        source: str,
+        filter: FilterEntity | None,
+        order: OrderEntity | None,
+        verbose: bool,
+    ):
         crawler_repo = HackerNewsCrawlerEntryAdapter()
 
         log_level = logging.INFO
-        if self.verbose:
+        if verbose:
             log_level = logging.DEBUG
         logger_repo = LoggerAdapter(log_level=log_level)
 
-        dto = GetEntriesDto(source=self.source, filter=self.filter, order=self.order)
+        dto = GetEntriesDto(source=source, filter=filter, order=order)
         result_entries = GetEntries(crawler_repo, logger_repo).execute(dto=dto)
 
         typer.echo("---RESULT---")
@@ -74,6 +76,6 @@ def main(
     if order is not None:
         order_field, direction = order
         order_cls = OrderEntity(field=order_field, direction=direction)
-    CliController(
+    CliController().run(
         source=source, filter=filter_cls, order=order_cls, verbose=verbose
-    ).run()
+    )
