@@ -41,12 +41,12 @@ class CliController:
             verbose (bool): LogLevel.DEBUG if verbose is True, else LogLevel.INFO
 
         """
-        crawler_repo = HackerNewsCrawlerEntryAdapter()
-
         log_level = logging.INFO
         if verbose:
             log_level = logging.DEBUG
         logger_repo = LoggerAdapter(log_level=log_level)
+
+        crawler_repo = HackerNewsCrawlerEntryAdapter(logger=logger_repo)
 
         dto = GetEntriesDto(source=source, filter=filter, order=order)
         result_entries = GetEntries(crawler_repo, logger_repo).execute(dto=dto)
@@ -92,11 +92,17 @@ def main(
     filter_cls = None
     if filter is not None:
         filter_field, operator, value = filter
-        filter_cls = FilterEntity(field=filter_field, operator=operator, value=value)
+        filter_cls = FilterEntity(
+            field=FilterFieldEnum[filter_field],
+            operator=FilterOperatorEnum[operator],
+            value=value,
+        )
     order_cls = None
     if order is not None:
         order_field, direction = order
-        order_cls = OrderEntity(field=order_field, direction=direction)
+        order_cls = OrderEntity(
+            field=OrderFieldEnum[order_field], direction=OrderDirectionEnum[direction]
+        )
     CliController().run(
         source=source, filter=filter_cls, order=order_cls, verbose=verbose
     )
