@@ -110,16 +110,14 @@ def main(
     if filter is not None:
         filter_field, operator, value = filter
         filter_cls = FilterEntity(
-            field=FilterFieldEnum[filter_field],
-            operator=FilterOperatorEnum[operator],
+            field=filter_field,
+            operator=operator,
             value=value,
         )
     order_cls = None
     if order is not None:
         order_field, direction = order
-        order_cls = OrderEntity(
-            field=OrderFieldEnum[order_field], direction=OrderDirectionEnum[direction]
-        )
+        order_cls = OrderEntity(field=order_field, direction=direction)
     CliController().run(
         source=source,
         filter=filter_cls,

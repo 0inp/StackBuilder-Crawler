@@ -29,7 +29,7 @@ class TestCliController:
             ),
             (
                 None,
-                ("number_of_words", "lt", 5),
+                (FilterFieldEnum.number_of_words, FilterOperatorEnum.lt, 5),
                 None,
                 None,
                 GetEntriesDto(
@@ -45,7 +45,7 @@ class TestCliController:
             (
                 None,
                 None,
-                ("comments", "desc"),
+                (OrderFieldEnum.comments, OrderDirectionEnum.desc),
                 None,
                 GetEntriesDto(
                     source="https://news.ycombinator.com/",
