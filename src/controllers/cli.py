@@ -21,12 +21,18 @@ from src.domain.entities import (
     OrderEntity,
     OrderFieldEnum,
 )
+from src.domain.entities.entry import EntryEntity
 from src.usecases import GetEntries
 
 
 @dataclass
 class CliController:
     """CLI controller of the application."""
+
+    @staticmethod
+    def print_entry_output(entry: EntryEntity):
+        output_string = f"{entry.index}. {entry.title} | Total Points : {entry.total_points} | Total Comments : {entry.total_comments}"
+        typer.echo(output_string)
 
     def run(
         self,
@@ -60,9 +66,9 @@ class CliController:
         dto = GetEntriesDto(source=source, filter=filter, order=order)
         result_entries = GetEntries(crawler_repo, logger_repo).execute(dto=dto)
 
-        typer.echo("---RESULT---")
+        typer.echo(f"---RESULT FROM SOURCE : {source}---")
         for entry in result_entries:
-            typer.echo(entry)
+            self.print_entry_output(entry)
 
 
 def main(
