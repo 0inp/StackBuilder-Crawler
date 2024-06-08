@@ -7,6 +7,7 @@ from src.domain.entities import (
     EntryEntity,
     FilterEntity,
     FilterFieldEnum,
+    FilterOperatorEnum,
     LogEntity,
     OrderDirectionEnum,
     OrderEntity,
