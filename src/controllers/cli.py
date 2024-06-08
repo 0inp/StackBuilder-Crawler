@@ -46,6 +46,7 @@ class CliController:
             log_level = logging.DEBUG
         logger_repo = LoggerAdapter(log_level=log_level)
 
+        # TODO: if not source == "HackerNews" then use Default Crawler
         crawler_repo = HackerNewsCrawlerEntryAdapter(logger=logger_repo)
 
         dto = GetEntriesDto(source=source, filter=filter, order=order)
