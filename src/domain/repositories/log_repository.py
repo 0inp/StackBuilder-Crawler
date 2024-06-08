@@ -13,6 +13,7 @@ class LogRepositoryInterface(ABC):
 
     def __init__(self, log_level: int):
         self.log_level = log_level
+        self.logger = None
 
     @abstractmethod
     def log_request(self, log_entity: LogEntity):
