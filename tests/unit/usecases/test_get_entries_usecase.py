@@ -3,7 +3,7 @@ import logging
 from _pytest.scope import HIGH_SCOPES
 import pytest
 
-from src.adapters import HackerNewsCrawlerEntryAdapter, LoggerAdapter
+from src.adapters import HackerNewsCrawlerEntryAdapter, FileLoggerAdapter
 from src.domain.dtos.get_entries import GetEntriesDto
 from src.domain.entities.entry import EntryEntity
 from src.domain.entities.filter import FilterEntity, FilterFieldEnum, FilterOperatorEnum
@@ -23,7 +23,7 @@ class TestGetEntriesUsecase:
                 source="source",
             )
         ]
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         mocker.patch.object(crawler, "get_entries", return_value=entries)
         mocker.patch.object(logger, "log_debug")
@@ -34,7 +34,7 @@ class TestGetEntriesUsecase:
         assert result == entries
 
     def test_get_entries_raise(self, mocker):
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         mocker.patch.object(crawler, "get_entries", side_effect=Exception)
         mocker.patch.object(logger, "log_debug")
@@ -60,7 +60,7 @@ class TestGetEntriesUsecase:
             source="source",
         )
         returned_entries = [filtered_entry, non_filtered_entry]
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         mocker.patch.object(crawler, "get_entries", return_value=returned_entries)
         mocker.patch.object(logger, "log_debug")
@@ -100,7 +100,7 @@ class TestGetEntriesUsecase:
         )
         # Random order
         returned_entries = [entry_middle_points, entry_high_points, entry_low_points]
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         mocker.patch.object(crawler, "get_entries", return_value=returned_entries)
         mocker.patch.object(logger, "log_debug")

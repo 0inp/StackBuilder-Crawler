@@ -4,7 +4,7 @@ from src.domain.entities import LogEntity
 from src.domain.repositories import LogRepositoryInterface
 
 
-class LoggerAdapter(LogRepositoryInterface):
+class FileLoggerAdapter(LogRepositoryInterface):
     """File Logger implementation.
 
     This logger will log everything according to the log level passed
@@ -16,7 +16,7 @@ class LoggerAdapter(LogRepositoryInterface):
         self.log_level = log_level
         self.logger = logging.getLogger("adapter_logger")
         logging.basicConfig(
-            filename="app.log",
+            filename="./data/app.log",
             filemode="a",
             datefmt="%Y-%m-%d %H:%M:%S",
             format="%(levelname)s - %(asctime)-s - %(message)s",
@@ -34,14 +34,8 @@ class LoggerAdapter(LogRepositoryInterface):
             order_log = (
                 f"{log_entity.order.field.value} {log_entity.order.direction.value}"
             )
-        print("toto")
         log_message = f"Filter by: {filter_log} - Order by: {order_log}"
         self.logger.info(log_message)
 
     def log_debug(self, message: str) -> None:
-        """Log debug message.
-
-        Args:
-            message (str): Message to log.
-        """
         logging.debug(message)

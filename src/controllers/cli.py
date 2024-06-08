@@ -5,7 +5,11 @@ from typing import Optional
 import typer
 from typing_extensions import Annotated
 
-from src.adapters import HackerNewsCrawlerEntryAdapter, LoggerAdapter
+from src.adapters import (
+    HackerNewsCrawlerEntryAdapter,
+    FileLoggerAdapter,
+    DBLoggerAdapter,
+)
 from src.domain.dtos.get_entries import (
     GetEntriesDto,
 )
@@ -29,6 +33,7 @@ class CliController:
         source: str,
         filter: FilterEntity | None,
         order: OrderEntity | None,
+        log_in_db: bool,
         verbose: bool,
     ):
         """Call the GetEntries usecase.
@@ -38,13 +43,16 @@ class CliController:
             source (str): url of the source to use.
             filter (Optional(FilterEntity)): Representation of a filter to use if there is one.
             order (Optional(OrderEntity)): Representation of an order query to use if there is one.
+            log_in_db (bool): DbLogger if True else FileLogger
             verbose (bool): LogLevel.DEBUG if verbose is True, else LogLevel.INFO
 
         """
         log_level = logging.INFO
         if verbose:
             log_level = logging.DEBUG
-        logger_repo = LoggerAdapter(log_level=log_level)
+        logger_repo = FileLoggerAdapter(log_level=log_level)
+        if log_in_db:
+            logger_repo = DBLoggerAdapter(log_level=log_level)
 
         # TODO: if not source == "HackerNews" then use Default Crawler
         crawler_repo = HackerNewsCrawlerEntryAdapter(logger=logger_repo)
@@ -64,6 +72,8 @@ def main(
     filter: Annotated[
         Optional[tuple[FilterFieldEnum, FilterOperatorEnum, int]],
         typer.Option(
+            "--filter",
+            "-f",
             help="Options for the filter (ex titles with more than 5 words: number_of_words lt 5)",
             show_default=False,
         ),
@@ -71,10 +81,15 @@ def main(
     order: Annotated[
         Optional[tuple[OrderFieldEnum, OrderDirectionEnum]],
         typer.Option(
+            "--order",
+            "-o",
             help="Options for the order (ex order by points desc: number_of_points desc)",
             show_default=False,
         ),
     ] = None,
+    log_in_db: bool = typer.Option(
+        False, "--db-log", "-d", help="If True, log in a SQLite db"
+    ),
     verbose: bool = typer.Option(
         False, "--verbose", "-v", help="If True, set Log Level to DEBUG"
     ),
@@ -86,6 +101,7 @@ def main(
         source (str): url of the source to use.
         filter (Optional(FilterEntity)): Representation of a filter to use if there is one.
         order (Optional(OrderEntity)): Representation of an order query to use if there is one.
+        log_in_db (bool): DbLogger if True else FileLogger
         verbose (bool): LogLevel.DEBUG if verbose is True, else LogLevel.INFO
 
     """
@@ -105,5 +121,9 @@ def main(
             field=OrderFieldEnum[order_field], direction=OrderDirectionEnum[direction]
         )
     CliController().run(
-        source=source, filter=filter_cls, order=order_cls, verbose=verbose
+        source=source,
+        filter=filter_cls,
+        order=order_cls,
+        log_in_db=log_in_db,
+        verbose=verbose,
     )

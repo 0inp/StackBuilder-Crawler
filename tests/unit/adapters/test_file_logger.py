@@ -3,7 +3,7 @@ from datetime import datetime
 
 import pytest
 
-from src.adapters.logger import LoggerAdapter
+from src.adapters.file_logger import FileLoggerAdapter
 from src.domain.entities import (
     FilterEntity,
     FilterFieldEnum,
@@ -65,14 +65,14 @@ class TestLoggerAdapter:
         return entity
 
     def test_create_logger(self):
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         assert logger is not None
-        assert type(logger) == LoggerAdapter
+        assert type(logger) == FileLoggerAdapter
         assert logger.log_level == logging.INFO
         assert logger.logger.level == logging.INFO
 
     def test_log_debug(self, mocker):
-        logger = LoggerAdapter(log_level=logging.DEBUG)
+        logger = FileLoggerAdapter(log_level=logging.DEBUG)
         mock_log_debug = mocker.patch("logging.debug")
         message_log = "message_log"
         logger.log_debug(message_log)
@@ -100,7 +100,7 @@ class TestLoggerAdapter:
         ],
     )
     def test_log_request(self, log_entity, expected, request, mocker):
-        logger = LoggerAdapter(log_level=logging.DEBUG)
+        logger = FileLoggerAdapter(log_level=logging.DEBUG)
         mock_log_info = mocker.patch.object(logger.logger, "info")
         logger.log_request(request.getfixturevalue(log_entity))
         mock_log_info.assert_called_once_with(expected)

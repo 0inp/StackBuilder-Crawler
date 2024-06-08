@@ -24,3 +24,13 @@ class LogRepositoryInterface(ABC):
 
         """
         ...
+
+    @abstractmethod
+    def log_debug(self, message: str):
+        """Log a debug message
+
+        Args:
+            message (str): a debug message.
+
+        """
+        ...

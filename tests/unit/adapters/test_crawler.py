@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import pytest
 from bs4 import BeautifulSoup, Tag
 
-from src.adapters import HackerNewsCrawlerEntryAdapter, LoggerAdapter
+from src.adapters import HackerNewsCrawlerEntryAdapter, FileLoggerAdapter
 from src.domain.entities.entry import EntryEntity
 
 
@@ -21,14 +21,14 @@ class TestCrawlerAdapter:
         return html_page
 
     def test_create_crawler(self):
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         assert crawler is not None
         assert type(crawler) == HackerNewsCrawlerEntryAdapter
 
     @pytest.mark.parametrize("html_page", [200], indirect=True)
     def test_get_entries(self, html_page, mocker):
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         mock_requests = mocker.patch("requests.get", return_value=html_page)
         source = "source"
@@ -45,7 +45,7 @@ class TestCrawlerAdapter:
 
     @pytest.mark.parametrize("html_page", [500], indirect=True)
     def test_get_entries_requests_error(self, html_page, mocker):
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         mock_requests = mocker.patch("requests.get", return_value=html_page)
         mocker.patch("logging.debug")
@@ -67,7 +67,7 @@ class TestCrawlerAdapter:
         ],
     )
     def test_get_entry_index_from_html(self, rank_html_string, expected):
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         html_string = (
             """<tr class="athing">"""
@@ -124,7 +124,7 @@ class TestCrawlerAdapter:
         ],
     )
     def test_get_entry_title_from_html(self, title_html_string, expected):
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         html_string = (
             """<tr class="athing"><td class="title"><span class="rank">12.</span></td>"""
@@ -167,7 +167,7 @@ class TestCrawlerAdapter:
         reason="Can't make html string to get html.next_sibling. Problem with newline char"
     )
     def test_get_entry_points_from_html(self, points_html_string, expected):
-        logger = LoggerAdapter(log_level=logging.INFO)
+        logger = FileLoggerAdapter(log_level=logging.INFO)
         crawler = HackerNewsCrawlerEntryAdapter(logger=logger)
         html_string = (
             """
