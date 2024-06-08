@@ -4,6 +4,75 @@
 
 This is the StackBuilders test for the application process.
 
+## Usage
+
+### Local Python/Poetry environment
+
+If you have a working python/poetry environment:
+
+```bash
+poetry install
+poetry run python main.py
+```
+
+If you want to know more about tests and coverage:
+
+```bash
+pytest --cov=src tests/
+# OR
+make test-cov
+```
+
+### Docker
+
+If you want to use docker:
+
+```bash
+# Build the docker image
+docker build -t sb-crawler --rm .
+# OR
+make docker-image
+
+# Run the container
+docker run -it --name sb-crawler-app --rm -v ./data:/app/data/ sb-crawler
+# OR
+make docker-run
+```
+
+Inside the container you can run the cli application
+
+```bash
+poetry run python main.py
+```
+
+For more information about the usage of the application:
+
+```bash
+python main.py --help
+```
+
+### Examples
+
+```bash
+# Simple mode. Will get all the entries from HackeNews.
+python main.py
+# Help.
+python main.py --help
+# Get entries and filter out the entries with more than or equal to 5 words in the title.
+python main.py --filter number_of_words lt 5
+# Order the entries with the number of comments from the entry with top comments to lowest one.
+python main.py --order comments desc
+# Will log some debug messages.
+python main.py --verbose
+# Will prefer to log in an SQLite DB.
+python main.py --db-log
+# To check the db.
+python -m sqlite3 data/app.db
+```
+
+The log directory `data/*` will be also saved in your local environment
+You can find in this file the logs of the usage of the application
+
 ### Exercise description
 
 > Using the language that you feel most proficient in, create a web crawler
@@ -111,3 +180,7 @@ Outputs:
 ## ADR
 
 see documentation [here](adr/adr.md)
+
+```
+
+```
